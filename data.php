@@ -1,27 +1,51 @@
 <?php
-$API_KEY = "1cf94e840097454101fdbb0a52ce1ec7ee7ce6ea";
+
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}
+
+function get_whois($ip, $server = "whois.arin.net")
+{
+    $sock = fsockopen($server, 43, $errno, $errstr);
+    if (!$sock) {
+        exit("$errno($errstr)");
+    } else {
+        fputs($sock, $ip . "\r\n");
+        $text = "";
+        while (!feof($sock)) {
+            $text .= fgets($sock, 128) . "<br>";;
+        }
+        fclose($sock);
+
+        $pattern = "|ReferralServer: whois://([^\n<:]+)|i";
+        preg_match($pattern, $text, $out);
+        if (!empty($out[1])) {
+            return get_whois($ip, $out[1]);
+        } else {
+            return $text;
+        }
+    }
+}
+
 $domain_name = $_POST['domain_name'];
 
-$start = microtime();
+$start = microtime_float();
 $ip = gethostbyname($domain_name);
-$end = microtime();
+$end = microtime_float();
 $time = $end - $start;
 
-// https://dadata.ru/api/detect_address_by_ip/
-$myCurl = curl_init();
-curl_setopt_array($myCurl, array(
-    CURLOPT_URL => "https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address",
-    CURLOPT_HTTPHEADER => array("Authorization: $API_KEY"),
-    CURLOPT_POSTFIELDS => http_build_query(array("ip" => $ip))
-));
-$response = curl_exec($myCurl);
-curl_close($myCurl);
-$contacts = $response;
+$whois = get_whois($ip);
+$t1 = strpos($whois, "OrgName");
+$temp = substr($whois, $t1);
+$t2 = strpos($temp, "# ARIN WHOIS");
+$contacts = substr($temp, 0, $t2 - 10);
 
 echo "
 Доменное имя: $domain_name<br />
 IP адрес: $ip<br />
-Контактные данные: $contacts<br />
+Контактные данные:<br /> $contacts<br />
 ";
 
 // TODO connect db
