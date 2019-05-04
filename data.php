@@ -59,11 +59,13 @@ function translate($text)
 $domain_name = $_POST['domain_name'];
 
 $start = microtime_float();
-$ip = gethostbyname($domain_name);
-$end = microtime_float();
-$time = $end - $start;
 
+$ip = gethostbyname($domain_name);
 $whois = get_whois($ip);
+
+$end = microtime_float();
+$time = ($end - $start) * 1000;
+
 $t1 = strpos($whois, "OrgName");
 $temp = substr($whois, $t1);
 $t2 = strpos($temp, "# ARIN WHOIS");
@@ -76,10 +78,9 @@ IP адрес: $ip<br />
 $contacts<br />
 ";
 
-// TODO connect db
-//$link = mysqli_connect("localhost", "php_user", "qwe123", "log");
+$link = mysqli_connect("localhost", "user", "1", "log");
+$db = mysqli_select_db($link, "log");
 
-// TODO insert log
-//mysqli_query();
+$link->query("INSERT INTO Log(id, ip, name, time) VALUES(default, '$ip', '$domain_name', $time)");
 
-//mysqli_close($link);
+mysqli_close($link);
