@@ -78,11 +78,15 @@ class _HomePageState extends State<HomePage> {
         headers: {'Content-Type':'application/json'},
       ).then((response) => setState(() {
           final map = jsonDecode(response.body);
-          dynamic domainName = map[0]['domain_name'];
-          dynamic ip = map[1]['ip'];
-          String contacts = map[2]['contacts'];
-          contacts.replaceAll("<br>", "");
-          _data = "Доменное имя: $domainName\nIP-адрес: $ip\nКонтактные данные\n$contacts";
+          if (map[0]['error'] != null) {
+            _data = "Не удалось получить информацию";
+          } else {
+            dynamic domainName = map[0]['domain_name'];
+            dynamic ip = map[1]['ip'];
+            String contacts = map[2]['contacts'];
+            contacts.replaceAll("<br>", "");
+            _data = "Доменное имя: $domainName\nIP-адрес: $ip\nКонтактные данные\n$contacts";
+          }
         })
       );
   }

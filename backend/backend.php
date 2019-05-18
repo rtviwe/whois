@@ -70,6 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $start = microtime_float();
 
     $ip = gethostbyname($domain_name);
+
+    if ($ip == $domain_name) {
+        http_response_code(200);
+        echo json_encode(array(
+            array("error" => "Invalid domain name"),
+        ));
+        return;
+    }
+
     $whois = get_whois($ip);
 
     $end = microtime_float();

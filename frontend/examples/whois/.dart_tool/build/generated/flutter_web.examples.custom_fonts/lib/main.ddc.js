@@ -140,11 +140,15 @@ define(['dart_sdk', 'packages/flutter_web/material', 'packages/flutter_web/anima
         let bodyJsonBody = convert.jsonEncode(bodyJsonMap);
         return yield http$.post(core.Uri.encodeFull("http://localhost/backend.php"), {body: bodyJsonBody, headers: new (IdentityMapOfString$String()).from(["Content-Type", "application/json"])}).then(dart.void, dart.fn(response => this.setState(dart.fn(() => {
           let map = convert.jsonDecode(response.body);
-          let domainName = dart.dsend(dart.dsend(map, '_get', [0]), '_get', ["domain_name"]);
-          let ip = dart.dsend(dart.dsend(map, '_get', [1]), '_get', ["ip"]);
-          let contacts = core.String._check(dart.dsend(dart.dsend(map, '_get', [2]), '_get', ["contacts"]));
-          contacts[$replaceAll]("<br>", "");
-          this[_data] = "Доменное имя: " + dart.str(domainName) + "\nIP-адрес: " + dart.str(ip) + "\nКонтактные данные\n" + dart.str(contacts);
+          if (dart.dsend(dart.dsend(map, '_get', [0]), '_get', ["error"]) != null) {
+            this[_data] = "Не удалось получить информацию";
+          } else {
+            let domainName = dart.dsend(dart.dsend(map, '_get', [0]), '_get', ["domain_name"]);
+            let ip = dart.dsend(dart.dsend(map, '_get', [1]), '_get', ["ip"]);
+            let contacts = core.String._check(dart.dsend(dart.dsend(map, '_get', [2]), '_get', ["contacts"]));
+            contacts[$replaceAll]("<br>", "");
+            this[_data] = "Доменное имя: " + dart.str(domainName) + "\nIP-адрес: " + dart.str(ip) + "\nКонтактные данные\n" + dart.str(contacts);
+          }
         }, VoidToNull())), ResponseTovoid()));
       }).bind(this));
     }
@@ -173,7 +177,7 @@ define(['dart_sdk', 'packages/flutter_web/material', 'packages/flutter_web/anima
   };
   dart.trackLibraries("packages/flutter_web.examples.custom_fonts/main", {
     "package:flutter_web.examples.custom_fonts/main.dart": main
-  }, '{"version":3,"sourceRoot":"","sources":["org-dartlang-app:///packages/flutter_web.examples.custom_fonts/main.dart"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;UAQ4B;AACxB,YAAO,gDACE,gBACA,wDACiB,2CAElB,8BAAgB,+eACM;IAEhC;;;;;;EACF;;;;;;;IAKe;;;;;;;AAGmB;IAAgB;;;QALlC;QAAU;;;AAAU,iDAAW,GAAG;;EAAC;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;UAavB;AACxB,YAAO,mDACG,8CACC,gCAAK,AAAO,w7BAEf,8CACc,sBAChB,2CACS,8CACe,8CAAI,cACjB,yDACW,wEACJ,6BAED,QAAC,WAAY,oBAAc,OAAO,kpDAInD,2CACS,0DACE,gCAAK,seACD,cAAM,glCAGrB,2CACS,gCAAK;IAKtB;;AAEsB;QACpB,cAAS,cAAM,cAAQ;AAEH,0BAAc,yCAChC,eAAe;AAEX,2BAAe,mBAAW,WAAW;AAE3C,cAAO,OAAM,AAIT,WAHI,oBAAW,wCACT,YAAY,WACT,yCAAC,gBAAe,uCACpB,QAAC,YAAa,cAAS;AACpB,oBAAM,mBAAW,AAAS,QAAD;AACvB,2BAAmB,WAAH,WAAH,GAAG,WAAC,cAAG;AACpB,mBAAW,WAAH,WAAH,GAAG,WAAC,cAAG;AACb,4CAAiB,WAAH,WAAH,GAAG,WAAC,cAAG;UACzB,AAAS,QAAD,cAAY,QAAQ;UAC5B,cAAQ,AAAwE,4BAAxD,UAAU,8BAAa,EAAE,uCAAsB,QAAQ;;MAGvF;;;;IAzDO,oBAAc;IACd,cAAQ;;;EAyDjB;;;;;;;;;;;;;;;AApFe,wCAAO;EAAQ","file":"main.ddc.js"}');
+  }, '{"version":3,"sourceRoot":"","sources":["org-dartlang-app:///packages/flutter_web.examples.custom_fonts/main.dart"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;UAQ4B;AACxB,YAAO,gDACE,gBACA,wDACiB,2CAElB,8BAAgB,+eACM;IAEhC;;;;;;EACF;;;;;;;IAKe;;;;;;;AAGmB;IAAgB;;;QALlC;QAAU;;;AAAU,iDAAW,GAAG;;EAAC;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;UAavB;AACxB,YAAO,mDACG,8CACC,gCAAK,AAAO,w7BAEf,8CACc,sBAChB,2CACS,8CACe,8CAAI,cACjB,yDACW,wEACJ,6BAED,QAAC,WAAY,oBAAc,OAAO,kpDAInD,2CACS,0DACE,gCAAK,seACD,cAAM,glCAGrB,2CACS,gCAAK;IAKtB;;AAEsB;QACpB,cAAS,cAAM,cAAQ;AAEH,0BAAc,yCAChC,eAAe;AAEX,2BAAe,mBAAW,WAAW;AAE3C,cAAO,OAAM,AAIT,WAHI,oBAAW,wCACT,YAAY,WACT,yCAAC,gBAAe,uCACpB,QAAC,YAAa,cAAS;AACpB,oBAAM,mBAAW,AAAS,QAAD;AAC/B,cAAU,WAAH,WAAH,GAAG,WAAC,cAAG,aAAY;YACrB,cAAQ;;AAEA,6BAAmB,WAAH,WAAH,GAAG,WAAC,cAAG;AACpB,qBAAW,WAAH,WAAH,GAAG,WAAC,cAAG;AACb,8CAAiB,WAAH,WAAH,GAAG,WAAC,cAAG;YACzB,AAAS,QAAD,cAAY,QAAQ;YAC5B,cAAQ,AAAwE,4BAAxD,UAAU,8BAAa,EAAE,uCAAsB,QAAQ;;;MAIzF;;;;IA7DO,oBAAc;IACd,cAAQ;;;EA6DjB;;;;;;;;;;;;;;;AAxFe,wCAAO;EAAQ","file":"main.ddc.js"}');
   // Exports:
   return {
     main: main
