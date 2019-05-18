@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -64,41 +64,37 @@ function translate($text)
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $request = file_get_contents('php://input');
+    $data = (array)json_decode($request);
+    $domain_name = $data['domain_name'];
 
-    if ($_SERVER['CONTENT_TYPE'] == 'application/json') {
-        $data = (array)json_decode($request);
-        $domain_name = $data['domain_name'];
+    $start = microtime_float();
 
-        $start = microtime_float();
+    $ip = gethostbyname($domain_name);
+    $whois = get_whois($ip);
 
-        $ip = gethostbyname($domain_name);
-        $whois = get_whois($ip);
+    $end = microtime_float();
+    $time = ($end - $start) * 1000;
 
-        $end = microtime_float();
-        $time = ($end - $start) * 1000;
+    $t1 = strpos($whois, "OrgName");
+    $temp = substr($whois, $t1);
+    $t2 = strpos($temp, "# ARIN WHOIS");
+    $contacts = substr($temp, 0, $t2 - 10);
+    $contacts = translate($contacts);
 
-        $t1 = strpos($whois, "OrgName");
-        $temp = substr($whois, $t1);
-        $t2 = strpos($temp, "# ARIN WHOIS");
-        $contacts = substr($temp, 0, $t2 - 10);
-        $contacts = translate($contacts);
+    $link = mysqli_connect("localhost", "user", "1", "log");
+    $db = mysqli_select_db($link, "log");
 
-        $link = mysqli_connect("localhost", "user", "1", "log");
-        $db = mysqli_select_db($link, "log");
+    $link->query("INSERT INTO Log(id, ip, name, time) VALUES(default, '$ip', '$domain_name', $time)");
 
-        $link->query("INSERT INTO Log(id, ip, name, time) VALUES(default, '$ip', '$domain_name', $time)");
-
-        mysqli_close($link);
-        http_response_code(200);
-        echo json_encode(array(
-            array("domain_name" => $domain_name),
-            array("ip" => $ip),
-            array("contacts" => $contacts)
-        ));
-    } else {
-        echo json_encode(array("Error" => "No data in request"));
-        http_response_code(400);
-    }
+    mysqli_close($link);
+    http_response_code(200);
+    echo json_encode(array(
+        array("domain_name" => $domain_name),
+        array("ip" => $ip),
+        array("contacts" => $contacts)
+    ));
+} else if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
 } else {
     echo json_encode(array("Error" => "No controller for not POST request"));
     http_response_code(404);
