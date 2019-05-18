@@ -38,29 +38,34 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Column(
-        children: <Widget>[
-          Center(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: TextField(
-                decoration: new InputDecoration.collapsed(
-                  hintText: 'Доменное имя',
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Center(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: TextField(
+                  decoration: new InputDecoration.collapsed(
+                    hintText: 'Доменное имя',
+                  ),
+                  onChanged: (newName) => _domainName = newName,
                 ),
-                onChanged: (newName) => _domainName = newName,
               ),
             ),
-          ),
-          Center(
-            child: RaisedButton(
-              child: Text('Найти'),
-              onPressed: () => _loadData(),
+            Center(
+              child: RaisedButton(
+                child: Text('Найти'),
+                onPressed: () => _loadData(),
+              ),
             ),
-          ),
-          Center(
-            child: Text(_data),
-          ),
-        ],
+            Center(
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: Text(_data),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
