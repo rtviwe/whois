@@ -80,6 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $t2 = strpos($temp, "# ARIN WHOIS");
     $contacts = substr($temp, 0, $t2 - 10);
     $contacts = translate($contacts);
+    $contacts = str_replace("<br>", "", $contacts);
+    $contacts = str_replace("  ", "", $contacts);
+    $contacts = str_replace("   ", "", $contacts);
 
     $link = mysqli_connect("localhost", "user", "1", "log");
     $db = mysqli_select_db($link, "log");
