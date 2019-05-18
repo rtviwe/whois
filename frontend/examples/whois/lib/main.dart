@@ -1,6 +1,5 @@
 import 'package:flutter_web/material.dart';
-// import 'dart:io';
-// import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -29,7 +28,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _domainName = "";
-  bool _isButtonEnabled = true;
   String _data = "";
 
   @override
@@ -46,7 +44,6 @@ class _HomePageState extends State<HomePage> {
               child: TextField(
                 decoration: new InputDecoration.collapsed(
                   hintText: 'Доменное имя',
-                  enabled: _isButtonEnabled
                 ),
                 onChanged: (newName) => _domainName = newName,
               ),
@@ -55,11 +52,7 @@ class _HomePageState extends State<HomePage> {
           Center(
             child: RaisedButton(
               child: Text('Найти'),
-              onPressed: () {
-                setState(() { _isButtonEnabled = false; });
-
-                _loadData();
-              },
+              onPressed: () => _loadData(),
             ),
           ),
           Center(
@@ -77,16 +70,12 @@ class _HomePageState extends State<HomePage> {
       'domain_name': _domainName,
     };
 
-    /*HttpClient()
-        .postUrl(Uri.parse('http://localhost/backend.php'))
-        .then((request) => request.close())
-        .then((response) => response.transform(Utf8Decoder()).listen(
-              (information) => {
-                    setState(() {
-                      _data = information;
-                      _isLoading = false;
-                    })
-                  },
-            ));*/
+    return await http.post(
+        Uri.encodeFull('http://localhost/backend.php'),
+        body: bodyJsonMap,
+        headers: {"Accept":"application/json"},
+      ).then((response) {
+      setState(() => _data = response.body);
+    });
   }
 }

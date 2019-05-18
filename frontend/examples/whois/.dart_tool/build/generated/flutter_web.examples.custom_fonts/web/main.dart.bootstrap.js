@@ -25,6 +25,9 @@ var baseUrl = (function () {
 
 let modulePaths = {
  "dart_sdk": "packages/build_web_compilers/src/dev_compiler/dart_sdk",
+ "packages/charcode/ascii": "packages/charcode/ascii.ddc",
+ "packages/charcode/charcode": "packages/charcode/charcode.ddc",
+ "packages/charcode/html_entity": "packages/charcode/html_entity.ddc",
  "packages/collection/collection": "packages/collection/collection.ddc",
  "packages/collection/src/algorithms": "packages/collection/src/algorithms.ddc",
  "packages/collection/src/canonicalized_map": "packages/collection/src/canonicalized_map.ddc",
@@ -50,8 +53,17 @@ let modulePaths = {
  "packages/flutter_web/src/scheduler/binding": "packages/flutter_web/src/scheduler/binding.ddc",
  "packages/flutter_web/src/services/clipboard": "packages/flutter_web/src/services/clipboard.ddc",
  "packages/flutter_web_ui/ui": "packages/flutter_web_ui/ui.ddc",
+ "packages/http/http": "packages/http/http.ddc",
+ "packages/http/src/base_client": "packages/http/src/base_client.ddc",
+ "packages/http_parser/http_parser": "packages/http_parser/http_parser.ddc",
  "packages/meta/meta": "packages/meta/meta.ddc",
+ "packages/path/path": "packages/path/path.ddc",
+ "packages/pedantic/pedantic": "packages/pedantic/pedantic.ddc",
+ "packages/source_span/source_span": "packages/source_span/source_span.ddc",
+ "packages/string_scanner/src/eager_span_scanner": "packages/string_scanner/src/eager_span_scanner.ddc",
+ "packages/term_glyph/src/generated/ascii_glyph_set": "packages/term_glyph/src/generated/ascii_glyph_set.ddc",
  "packages/typed_data/typed_buffers": "packages/typed_data/typed_buffers.ddc",
+ "packages/typed_data/typed_data": "packages/typed_data/typed_data.ddc",
  "packages/vector_math/hash": "packages/vector_math/hash.ddc",
  "packages/vector_math/vector_math_64": "packages/vector_math/vector_math_64.ddc",
  "web/main": "main.ddc"

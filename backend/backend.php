@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $request = file_get_contents('php://input');
 
     if ($_SERVER['CONTENT_TYPE'] == 'application/json') {
-        $data = (array) json_decode($request);
+        $data = (array)json_decode($request);
         $domain_name = $data['domain_name'];
 
         $start = microtime_float();
@@ -96,10 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             array("contacts" => $contacts)
         ));
     } else {
-        echo json_encode(array("Error" => "Нет данных в запросе"));
+        echo json_encode(array("Error" => "No data in request"));
         http_response_code(400);
     }
 } else {
-    echo json_encode(array("Error" => "Не найден запрос GET"));
+    echo json_encode(array("Error" => "No controller for not POST request"));
     http_response_code(404);
 }
