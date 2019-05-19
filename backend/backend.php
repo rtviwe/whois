@@ -67,8 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = (array)json_decode($request);
     $domain_name = $data['domain_name'];
 
-    $start = microtime_float();
-
     $ip = gethostbyname($domain_name);
 
     if ($ip == $domain_name) {
@@ -80,9 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $whois = get_whois($ip);
-
-    $end = microtime_float();
-    $time = ($end - $start) * 1000;
 
     $t1 = strpos($whois, "OrgName");
     $temp = substr($whois, $t1);
@@ -96,7 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $link = mysqli_connect("localhost", "user", "1", "log");
     $db = mysqli_select_db($link, "log");
 
-    $link->query("INSERT INTO Log(id, ip, name, time) VALUES(default, '$ip', '$domain_name', $time)");
+    $time = date(DateTime::ISO8601);
+    $link->query("INSERT INTO Log(id, ip, name, time) VALUES(default, '$ip', '$domain_name', '$time')");
 
     mysqli_close($link);
     http_response_code(200);
