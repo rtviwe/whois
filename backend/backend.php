@@ -41,24 +41,8 @@ function translate($text)
     $text = preg_replace("/OrgId/", "Id организации", $text, 1);
     $text = preg_replace("/Address/", "Адрес", $text, 1);
     $text = preg_replace("/City/", "Город", $text, 1);
-    $text = preg_replace("/StateProv/", "Штат", $text, 1);
     $text = preg_replace("/PostalCode/", "Индекс", $text, 1);
     $text = preg_replace("/Country/", "Страна", $text, 1);
-    $text = preg_replace("/RegDate/", "Дата регистрации", $text, 1);
-    $text = preg_replace("/Updated/", "Обновлено", $text, 1);
-    $text = preg_replace("/Ref/", "Ссылка", $text, 1);
-    $text = preg_replace("/ReferralServer/", "Сервер", $text, 1);
-    $text = preg_replace("/ResourceLink/", "Ссылка на ресурсы", $text, 1);
-    $text = preg_replace("/OrgAbuseHandle/", "Владелец огранизации", $text, 1);
-    $text = preg_replace("/OrgAbuseName/", "Название владельца организации", $text, 1);
-    $text = preg_replace("/OrgAbusePhone/", "Номер владельца организации", $text, 1);
-    $text = preg_replace("/OrgAbuseEmail/", "Почта владельца организации", $text, 1);
-    $text = preg_replace("/OrgAbuseRef/", "Сслыка владельца организации", $text, 1);
-    $text = preg_replace("/OrgTechHandle/", "Организация", $text, 1);
-    $text = preg_replace("/OrgTechName/", "Название организации", $text, 1);
-    $text = preg_replace("/OrgTechPhone/", "Номер организации", $text, 1);
-    $text = preg_replace("/OrgTechEmail/", "Почта организации", $text, 1);
-    $text = preg_replace("/OrgTechRef/", "Ссылка организации", $text, 1);
     return $text;
 }
 
@@ -81,12 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $t1 = strpos($whois, "OrgName");
     $temp = substr($whois, $t1);
-    $t2 = strpos($temp, "# ARIN WHOIS");
-    $contacts = substr($temp, 0, $t2 - 10);
+    $t2 = strpos($temp, "Country");
+    $contacts = substr($temp, 0, $t2);
     $contacts = translate($contacts);
     $contacts = str_replace("<br>", "", $contacts);
     $contacts = str_replace("  ", "", $contacts);
-    $contacts = str_replace("   ", "", $contacts);
 
     $link = mysqli_connect("localhost", "user", "1", "log");
     $db = mysqli_select_db($link, "log");
