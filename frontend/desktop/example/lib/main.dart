@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
             dynamic domainName = map[0]['domain_name'];
             dynamic ip = map[1]['ip'];
             String contacts = map[2]['contacts'];
-            print(contacts);
+            contacts = contacts.replaceFirst(RegExp("\nStateProv:"), "");
             contacts.replaceAll("<br>", "");
             _data =
                 "Доменное имя: $domainName\nIP-адрес: $ip\n$contacts";
