@@ -1,8 +1,0 @@
-name: window_size
-description: Window resizing for desktop Flutter
-dependencies:
-  flutter:
-    sdk: flutter
-
-environment:
-  sdk: '<3.0.0'
